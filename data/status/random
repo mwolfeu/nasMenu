@@ -1,0 +1,3 @@
+#!/bin/bash
+echo -n RANDOM
+exit $((RANDOM % 2))

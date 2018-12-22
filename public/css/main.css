@@ -1,0 +1,53 @@
+#nm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  aalign-content: stretch;
+  color: white;
+  background-color: #272727;
+}
+
+#nm-header > div {
+  bbackground-color: #f1f1f1;
+  wwidth: 80px;
+  mmargin: 10px;
+  ttext-align: center;
+  lline-height: 65px;
+  padding: 5px;
+  font-size: 4vh;
+}
+
+.nm-icon {
+  width: 30px;
+  height: 30px;
+}
+
+#nm-top-menu {
+  width: 30%;
+}
+
+#nm-top-info {
+  width: 30%;
+  text-align: right;
+  margin-right: 5px;
+}
+
+.nm-box {
+  margin: 1px;
+  lline-height: 75px;
+  ffont-size: 30px;
+  
+  padding-left: 5px;
+  background:gray;
+  border: 1px solid black;
+  border-radius: 2px;
+  max-height: 90vh; 
+  overflow: hidden;
+}
+
+.nm-box-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2px;
+}
+

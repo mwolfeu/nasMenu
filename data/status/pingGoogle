@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if ping -c1 google.com &> /dev/null; then
+  echo -n Google up
+  exit 0
+else
+  echo -n Google down
+  exit 1
+fi
