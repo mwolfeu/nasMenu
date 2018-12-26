@@ -34,8 +34,8 @@
     </div>
     
     <script type="text/javascript">
-      template_row = '<span class="nm-box nm-box-info"><span class="nm-box-content" data-path="{0}" >{1}</span></span>'
-      transition_ms = 200;
+      var template_row = '<span class="nm-box nm-box-info"><span class="nm-box-content" data-path="{0}" >{1}</span></span>';
+      var transition_ms = 200;
       
       // a pythonesque format method
       if (!String.prototype.format) {
@@ -59,15 +59,22 @@
         $("#nm-top-info").html(new Date().toLocaleString());
       }
       
+      var curPage;
+      var timeoutId; // update timeout for current page
+      // update and show page data
       function show_page(name) {
         $(".nm-box-container").hide();
         $("#nm-page-" + name).show();
         $("#nm-top-title").html(name);
+        curPage = name;
         
         $.get("filelist?pgname=" + name, (d, status) => {
           var handler;
           if (d.type == 'file') handler = fileHandler;
           if (d.type == 'bin' || d.type == 'status')  handler = binHandler;
+          
+          if (timeoutId != undefined) clearTimeout(timeoutId);
+          timeoutID = undefined;
           
           if (d.type == 'file' || d.type == 'bin') {
             $("#nm-page-" + name).empty();
@@ -80,16 +87,18 @@
           if (d.type == 'status') {
             $("#nm-page-" + name).empty();
             d.data.forEach((e) => {
-              $("#nm-page-" + name).append(template_row.format(e, basename(e)));
+              $("#nm-page-" + name).append(template_row.format(e, basename(e) + ": "));
               });
-            $(".nm-box-info").click({pgname:name, contentHandler:handler}, infoToggle);
+            timeoutId = 1; // give it a fake id to start with
+            statHandler(name, 5000); // call manually
           }
           
         }, "json");
       }
       
+      // initialize pages
       function init_pages() {
-        var template_mitem = '<a class="dropdown-item" href="#" data-pg="{0}">{0}</a>';
+        var template_mitem = '<a class="dropdown-item" data-pg="{0}">{0}</a>';
         var template_page = '<div class="nm-box-container" id="nm-page-{0}"></div>';
         
         $.get("pgnames", (d, status) => {
@@ -128,8 +137,28 @@
         }, "json");
       }
       
+      function statHandler(pgname, timeout) {
+        console.log(pgname)
+        var sel = "#nm-page-" + pgname + "  .nm-box-content";
+        $(sel).each(function(d) {
+          var fpath = $(this).attr("data-path");
+          var bn = basename(fpath);
+          $.get("binOutput", {pgname:pgname, fpath:fpath}, (e, status) => {
+            var bss = parseInt(e.data.status) == 0?"bg-info text-dark":"bg-warning text-white"; // bootstrap status: https://getbootstrap.com/docs/4.0/utilities/colors/
+            $(this).find("span").remove();
+            $(this).append("<span>" + e.data.stdio + "</span>");
+            $(this).closest(".nm-box-info").removeClass("bg-info text-dark bg-warning text-white");
+            $(this).closest(".nm-box-info").addClass(bss);
+            }, "json");
+          });
+        if (curPage == pgname)
+          timeoutId = setTimeout(statHandler, timeout, pgname, timeout);
+        else
+          timeoutId = undefined;
+      }
+      
       var infoHidden = true;
-      function infoToggle(e) {
+      function infoToggle(e) {  // show-hide line data
         if(infoHidden) {
           $(".nm-box-info").not(this).hide(transition_ms);
           e.data.contentHandler(this, e.data.pgname);

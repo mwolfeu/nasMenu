@@ -1,6 +1,6 @@
 var express = require('express');
 var fileset = require('file-set');
-var path = require('path');
+// var path = require('path');
 var fs = require('fs');
 var spawnSync = require('child_process').spawnSync, child;
 
@@ -12,12 +12,11 @@ var app = express();
  * onscreen keyboard
  * use glob instead of fileset
  * binOutput errors formatted wrong
+ * bin and status should be same - status has timer property, both have timeout & sig
+ * count warnings
  * */
 
-function switchToOutput(cfgRow) {
-}
-
-var startPg = "Logs";
+var startPg = "Status";
 var fileChunkSz = 100;
 var orientation;
 
@@ -63,8 +62,8 @@ app.get('/fileOutput', function (req, res) {
   var fpath = req.query.fpath;
   var start = parseInt(req.query.start);
 
-  if (fpath == undefined) {res.send("BAD_FPATH"); return;};
-  if (start == NaN) {start = 0};
+  if (fpath == undefined) {res.send("BAD_FPATH"); return;}
+  if (isNaN(start)) {start = 0}
   
   var confObj = config.filter(d => {return d.name == pgName;})[0];
   if (confObj == undefined || confObj.type != "file") {res.send("BAD_PGNAME"); return;}
@@ -105,7 +104,7 @@ app.get('/binOutput', function (req, res) {
 
 app.use(express.static('public'));
 
-var server = app.listen(8000, function () {
+var server = app.listen(8080, function () {
   var host = "localhost"; // server.address().address;
   var port = server.address().port;
   console.log("Server: http://%s:%s", host, port);
