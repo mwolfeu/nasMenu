@@ -45,16 +45,16 @@ ipc.server.start();
 var app = express();
 
 /*
- * icons
  * onscreen keyboard
- * add config options: timeout to [page], bin: timeout, sig
+ * add config options: timeout to [page], bin: timeout, sig, ip, port
     * bin and status should be same - status has timer property, both have timeout & sig
  
  * use glob instead of fileset
+ * icons
  * external config file 
  * - rotating div for sideways on rpi - or https://www.raspberrypi-spy.co.uk/2017/11/how-to-rotate-the-raspberry-pi-display-output/
  
- * localhost only
+ * X localhost only
  * X stop timer when modal up
  * X timeout to Status
  * X add name to placeholder
@@ -76,8 +76,6 @@ var config = [
   {name:"Logs", type:"file", location:['/home/ich/Desktop/UnEncrypted/logs/*.err', "data/logs/*"],  buttons:"del"},
   //~ {name:"Passwords", type:"password",  buttons:"del,reply"},
   {name:"Commands", type:"bin", location:"data/bin/*",  buttons:"run", timeout:5000, signal:9},
-  //~ {name:"Output", type:"buffer",  buttons:"del"},
-  //~ {name:"Events", type:"buffer",  buttons:"del"}
 ];
 
 // send next request key for password
@@ -182,8 +180,9 @@ app.get('/binOutput', function (req, res) {
 
 app.use(express.static('public'));
 
-var server = app.listen(8080, function () {
-  var host = "localhost"; // server.address().address;
+var host='localhost';
+var server = app.listen(8080, host, function () {
+  var host = server.address().address;
   var port = server.address().port;
   console.log("Server: http://%s:%s", host, port);
 });
