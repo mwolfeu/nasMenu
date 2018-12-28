@@ -1,3 +1,7 @@
+#nm-content {
+  font-size: 5vh;
+}
+
 #nm-header {
   display: flex;
   align-items: center;
@@ -14,7 +18,15 @@
   ttext-align: center;
   lline-height: 65px;
   padding: 5px;
-  font-size: 4vh;
+  font-size: 6vh;
+}
+
+#nm-header > div > button {
+  font-size: 6vh;
+}
+
+.dropdown-item {
+  font-size: 5vh;
 }
 
 .nm-icon {
@@ -38,8 +50,8 @@
   ffont-size: 30px;
   
   padding-left: 5px;
-  background:gray;
-  border: 1px solid black;
+  background: #eee;
+  border: 5px solid #888;
   border-radius: 2px;
   max-height: 90vh; 
   overflow: hidden;
