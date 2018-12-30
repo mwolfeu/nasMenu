@@ -52,7 +52,9 @@ var app = express();
  * use glob instead of fileset
  * icons
  * external config file 
- * 
+ * clear password from form
+ * add start.sh example
+ * run first as not incognito to store pwds
  * - rotating div for sideways on rpi - or https://www.raspberrypi-spy.co.uk/2017/11/how-to-rotate-the-raspberry-pi-display-output/
  
  * X localhost only
