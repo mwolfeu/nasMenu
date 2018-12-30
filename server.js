@@ -52,6 +52,7 @@ var app = express();
  * use glob instead of fileset
  * icons
  * external config file 
+ * 
  * - rotating div for sideways on rpi - or https://www.raspberrypi-spy.co.uk/2017/11/how-to-rotate-the-raspberry-pi-display-output/
  
  * X localhost only
@@ -82,7 +83,7 @@ var config = [
 app.get('/passpoll', function (req, res) {
   var key = pwKeyQueue.pop();
   if (key!=undefined) // assume the modal will show.  unblank screen.
-    spawnSync("xset", [ 'dpmi', 'force', 'on'], {shell:true, env:{DISPLAY:':0'}});
+    spawnSync("xset", [ 'dpms', 'force', 'on'], {shell:true, env:{DISPLAY:':0'}});
   res.send(key==undefined?"":key);
 });
 
